@@ -1,0 +1,180 @@
+basePath: /atmail
+definitions:
+  model.Error:
+    properties:
+      error:
+        type: string
+    type: object
+  model.User:
+    properties:
+      age:
+        type: integer
+      email:
+        type: string
+      id:
+        type: integer
+      username:
+        type: string
+    type: object
+  model.UserRequest:
+    properties:
+      age:
+        type: integer
+      email:
+        type: string
+      username:
+        type: string
+    type: object
+info:
+  contact:
+    email: janemarianne.zapanta@gmail.com
+    name: Jane Marianne Zapanta
+  description: A Golang HTTP server that performs user management operations (CRUD)
+    using RESTful APIs.
+  title: Atmail Assessment Task
+  version: 1.0.0
+paths:
+  /users:
+    get:
+      description: Retrieve all users
+      operationId: GetAll
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.User'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.Error'
+      security:
+      - BasicAuth: []
+      summary: Retrieve all users
+      tags:
+      - Users
+    post:
+      description: Create User
+      operationId: Create
+      parameters:
+      - description: User Details
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/model.UserRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/model.User'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.Error'
+      security:
+      - BasicAuth: []
+      summary: Create User
+      tags:
+      - Users
+  /users/{id}:
+    delete:
+      description: Delete User
+      operationId: Delete
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.Error'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/model.Error'
+      security:
+      - BasicAuth: []
+      summary: Delete User
+      tags:
+      - Users
+    get:
+      description: Retrieve user details by ID
+      operationId: Get
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.User'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.Error'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/model.Error'
+      security:
+      - BasicAuth: []
+      summary: Retrieve user details by ID
+      tags:
+      - Users
+    put:
+      description: Update User Dettails
+      operationId: Update
+      parameters:
+      - description: Update User
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/model.UserRequest'
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.User'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.Error'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/model.Error'
+      security:
+      - BasicAuth: []
+      summary: Update User Dettails
+      tags:
+      - Users
+securityDefinitions:
+  BasicAuth:
+    type: basic
+swagger: "2.0"

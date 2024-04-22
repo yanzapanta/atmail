@@ -1,0 +1,33 @@
+version: '3'
+
+services:
+  mysql:
+    platform: "linux/amd64"
+    image: "mysql:8.0"
+    expose:
+      - "3306"
+    ports:
+      - "3306:3306"
+    environment:
+      - "MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}"
+      - "MYSQL_USER=${DB_USER}"
+      - "MYSQL_PASSWORD=${DB_PASSWORD}"
+      - "MYSQL_DATABASE=${DB_NAME}"
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+    volumes:
+      - "./resources/db.sql:/docker-entrypoint-initdb.d/db.sql"
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: on-failure
+    ports:
+      - "80:80"
+    depends_on:
+      mysql:
+        condition: service_healthy
+    env_file:
+      - ./.env
